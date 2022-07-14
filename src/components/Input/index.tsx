@@ -1,5 +1,6 @@
-import { defineComponent } from "vue";
+import { defineComponent, inject } from "vue";
 import './index.scss'
+import {FormItemContext, FormItemKey} from "@/components/Form/types";
 
 export default defineComponent({
   name: "AInput",
@@ -13,7 +14,7 @@ export default defineComponent({
       type: String,
       validator:(value: string) => {
         // 这个值必须匹配下列字符串中的一个
-        return ['text', 'number', 'tel', 'textarea', 'time'].indexOf(value) !== -1
+        return ['text', 'password', 'number', 'tel', 'textarea', 'time'].indexOf(value) !== -1
       },
       default: 'text'
     }
@@ -21,21 +22,30 @@ export default defineComponent({
   emits: ['update:modelValue'],
   setup(props, {emit, attrs}) {
     console.log('attrs', attrs);
-
+    // 接收FormItem注入
+    const formItemCtx = inject(FormItemKey) as FormItemContext;
     const oninput = (event: Event) => {
       const value = (event.target as HTMLInputElement).value
       if(value !== props.modelValue) {
         emit('update:modelValue', value)
+        formItemCtx.handlerValueChange(value)
       }
+      console.log('正在输入')
+    }
+    const onblur = (event: Event) => {
+      const value = (event.target as HTMLInputElement).value
+      console.log('失去焦点', value);
+      formItemCtx.handlerControBlur(props.modelValue)
     }
     return () => {
       return (
         <div class="ant-field-wrap">
-          <input 
-            type="text" 
-            class="ant-field" 
+          <input
+            type={props.type}
+            class="ant-field"
             placeholder={attrs.placeholder as string}
             onInput={oninput}
+            onBlur={onblur}
             value={props.modelValue}
           />
         </div>
