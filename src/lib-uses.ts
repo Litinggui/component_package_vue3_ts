@@ -5,12 +5,16 @@
 import Input from "./components/Input";
 import Form from './components/Form/Form'
 import FormItem from "./components/Form/FormItem";
+import Tabs from "./components/Tabs"
+import TabPane from "./components/Tabs/TabPane"
 import {App} from 'vue'
 
 const components = [
   Input,
   Form,
-  FormItem
+  FormItem,
+  Tabs,
+  TabPane
 ]
 
 export default function (app: App) {

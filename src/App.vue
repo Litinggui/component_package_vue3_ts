@@ -1,17 +1,17 @@
 <template>
   <div class="app">
-    <form-demo/>
+    <tabs-demo/>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import FormDemo from './components/Form/FormDemo.vue';
+import TabsDemo from "@/components/Tabs/demo.vue";
 
 export default defineComponent({
   name: 'App',
   components: {
-    FormDemo
+    TabsDemo
   }
 });
 </script>

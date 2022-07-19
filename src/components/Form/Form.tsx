@@ -14,11 +14,11 @@ export default defineComponent({
     },
     rules: Object as PropType<AntFormRules>
   },
-  setup(props, {slots}) {
+  emits: ['validate'],
+  setup(props, {slots, emit}) {
     const formItems: FormItemContext[] = []
     const addItem = (item: FormItemContext) => {
       formItems.push(item)
-      console.log('formItems', formItems);
     }
     const removeItem = (id: string) => {
       if(formItems.length) {
@@ -43,20 +43,27 @@ export default defineComponent({
           .map(item => item.validate(props.model[item.prop]))
       ).then(res => {
         if(callback) {callback(true)}
+        emit('validate', true)
         return Promise.resolve(true)
       }).catch(err => {
         if(callback) {callback(false)}
+        emit('validate', err)
         return Promise.reject(err)
       })
+    }
+    const onsubmit = (e: Event) => {
+      console.log('submit')
+      e.preventDefault()
     }
     // 获取组件实例，组件实例上定义方法供调用
     expore<{validate: validateFun}>({validate})
     return () => {
       return (
-        <div class="ant-form">
+        <form class="ant-form" onSubmit={ onsubmit }>
           {slots!.default!()}
-        </div>
+        </form>
       )
     }
   }
 })
+

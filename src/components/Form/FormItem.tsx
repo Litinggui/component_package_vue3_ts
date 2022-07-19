@@ -44,7 +44,6 @@ export default defineComponent({
       const rules = props.rules || parent?.rules[props.prop]
       if(rules) {
         const ruleArr = Array.isArray(rules) ? rules : [rules]
-        console.log(ruleArr);
         // 如果curTrigger存在，则是自己触发得验证，否则是表单触发得验证
         if(curTrigger) {
           if(curTrigger === 'change') {
@@ -79,7 +78,6 @@ export default defineComponent({
     }
     // 接收input改变的方法
     const handlerValueChange = (value: string) => {
-      console.log('handlerValueChange', value);
       const trueRules = getRule('change');
       if(trueRules.length) {
         validate(value, trueRules)
@@ -87,7 +85,6 @@ export default defineComponent({
     }
     // 接收失去焦点事件
     const handlerControBlur = (value: string) => {
-      console.log('handlerControBlur', value);
       const trueRules = getRule('blur');
       if(trueRules.length) {
         validate(value, trueRules)

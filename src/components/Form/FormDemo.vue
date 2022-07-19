@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-form :model="formValues" :rules="formRules" ref="AForm">
+    <a-form :model="formValues" :rules="formRules" ref="AForm" @validate="handleValidate">
       <a-form-item label="姓名" prop="name" :rules="nameRules">
         <a-input v-model="formValues.name" placeholder="请输入姓名"/>
       </a-form-item>
@@ -8,7 +8,7 @@
         <a-input v-model="formValues.password" placeholder="请输入密码" type="password" />
       </a-form-item>
       <a-form-item>
-        <button @click="submit">
+        <button type="submit" @click="submit">
           提交
         </button>
       </a-form-item>
@@ -21,6 +21,7 @@ import {defineComponent, reactive, ref} from 'vue'
 import AFormItem from "@/components/Form/FormItem";
 import AInput from "@/components/Input";
 import {AntFormRules, AntRuleItem, FormContext} from "@/components/Form/types";
+import {ValidateError} from "async-validator/dist-types/interface";
 
 export default defineComponent({
   name: "FormDemo",
@@ -81,6 +82,7 @@ export default defineComponent({
     }
 
     )
+    // 通过AForm组件实例上暴露的方法调用提交校验
     const submit = () => {
       const aform = AForm.value!.validate((vaild) => {
         console.log('vaild', vaild);
@@ -89,8 +91,18 @@ export default defineComponent({
       }).catch(err => {
         console.log('AForm.value!.validate-err', err);
       })
-
-      console.log('aform',aform)
+      // return false
+    }
+    // 通过submit事件处理，派发validate事件
+    const handleValidate = (res: boolean | ValidateError[]) => {
+      console.log('handleValidate', res)
+      if(typeof res === 'boolean' && res) {
+        alert('校验通过')
+      }else if(Array.isArray(res)) {
+        if(res.length) {
+          alert(res[0].message)
+        }
+      }
     }
     return {
       formValues,
@@ -98,7 +110,8 @@ export default defineComponent({
       pwdRules,
       submit,
       AForm,
-      formRules
+      formRules,
+      handleValidate
     }
   }
 })

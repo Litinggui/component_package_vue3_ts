@@ -21,7 +21,6 @@ export default defineComponent({
   },
   emits: ['update:modelValue'],
   setup(props, {emit, attrs}) {
-    console.log('attrs', attrs);
     // 接收FormItem注入
     const formItemCtx = inject(FormItemKey) as FormItemContext;
     const oninput = (event: Event) => {
@@ -30,11 +29,9 @@ export default defineComponent({
         emit('update:modelValue', value)
         formItemCtx.handlerValueChange(value)
       }
-      console.log('正在输入')
     }
     const onblur = (event: Event) => {
       const value = (event.target as HTMLInputElement).value
-      console.log('失去焦点', value);
       formItemCtx.handlerControBlur(props.modelValue)
     }
     return () => {

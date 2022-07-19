@@ -4,7 +4,6 @@ import {getCurrentInstance} from "vue";
 function expore<T>(extra: T) {
   const instance = getCurrentInstance()
   if(instance) {
-    console.log(instance);
     Object.assign(instance.proxy, extra)
   }
 }
