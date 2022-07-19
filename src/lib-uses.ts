@@ -3,11 +3,13 @@
 */
 
 import Input from "./components/Input";
+import Form from './components/Form/Form'
 import FormItem from "./components/Form/FormItem";
 import {App} from 'vue'
 
 const components = [
   Input,
+  Form,
   FormItem
 ]
 
