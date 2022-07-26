@@ -41,16 +41,25 @@ export default defineComponent({
 			}
 		}
     onMounted(() => {
+			console.log('onMounted');
 			if(!currentTabName.value && paneList.length) {
 				currentTabName.value = paneList[0].name
 			}
 			updatePaneVisible()
+			setTimeout(() => {
+				currentTabName.value = 'TabOne'
+			}, 2000)
     })
 		// 渲染ant-tab-pane Dom
 		const renderNavs = () => {
+			console.log('renderNavs');
 			return paneList.map(item => {
 				const activeFlg = item.name === currentTabName.value ? 'active' : ''
-				return (<div class={`ant-tab-pane ${activeFlg}`} onClick={() => changePane(item.name) }>{item.name}</div>)
+				return (
+					<div class={`ant-tab-pane ${activeFlg}`} onClick={() => changePane(item.name) }>
+						{item.slotsTitle ? item.slotsTitle(item.name) : item.name}
+					</div>
+				)
 			})
 		}
 		// 监听modelValue

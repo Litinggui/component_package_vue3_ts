@@ -7,6 +7,7 @@ import Form from './components/Form/Form'
 import FormItem from "./components/Form/FormItem";
 import Tabs from "./components/Tabs"
 import TabPane from "./components/Tabs/TabPane"
+import Tree from './components/Tree'
 import {App} from 'vue'
 
 const components = [
@@ -14,7 +15,8 @@ const components = [
   Form,
   FormItem,
   Tabs,
-  TabPane
+  TabPane,
+  Tree
 ]
 
 export default function (app: App) {

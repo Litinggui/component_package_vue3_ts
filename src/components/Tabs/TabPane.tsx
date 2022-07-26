@@ -18,8 +18,10 @@ export default defineComponent({
     onMounted(() => {
       parent?.addPane({
         name:props.name,
-        changeShow
+        changeShow,
+        slotsTitle: slots.title
       })
+      console.log('slots', slots);
     })
     return () => {
       return (

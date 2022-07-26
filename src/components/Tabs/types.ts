@@ -1,8 +1,11 @@
+import {Slot} from "vue";
+
 const TabsKey = 'tabsKey'
 
 interface TabPaneContext {
   name: string;
-  changeShow(visbile: boolean): void
+  changeShow(visbile: boolean): void,
+  slotsTitle?: Slot
 }
 
 interface TabContext {

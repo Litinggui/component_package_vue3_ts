@@ -1,17 +1,18 @@
 <template>
   <div class="app">
-    <tabs-demo/>
+    <h3>Tree demo</h3>
+    <tree-demo></tree-demo>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import TabsDemo from "@/components/Tabs/demo.vue";
+import TreeDemo from "@/components/Tree/demo.vue";
 
 export default defineComponent({
   name: 'App',
   components: {
-    TabsDemo
+    TreeDemo
   }
 });
 </script>

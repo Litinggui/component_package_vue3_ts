@@ -1,9 +1,19 @@
 <template>
   <div>
     <a-tabs v-model="currentPane" @update:ModelValue="updateModelValue">
-      <a-tab-pane name="TabOne">TabOneTabOne</a-tab-pane>
+      <a-tab-pane name="TabOne">
+        <template #title="name">
+          <b style="color: #4bba2e">首页-{{name}}</b>
+        </template>
+        TabOneTabOne
+      </a-tab-pane>
       <a-tab-pane name="TabTwo">TabTwoTabTwoTabTwo</a-tab-pane>
-      <a-tab-pane name="TabThree">TabThreeTabThreeTabThree</a-tab-pane>
+      <a-tab-pane name="TabThree">
+        <template #title="name">
+          <b style="color: #35deee">产品-{{name}}</b>
+        </template>
+        TabThreeTabThreeTabThree
+      </a-tab-pane>
     </a-tabs>
   </div>
 </template>
