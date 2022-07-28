@@ -1,8 +1,9 @@
 import {defineComponent, PropType, ref, watch} from "vue";
 import { cloneDeep } from 'lodash'
 import './index.scss'
-import {RequiredTreeNodeOptions, TreeNodeOptions} from "@/components/Tree/types";
+import {nodeKey, renderFncType, RequiredTreeNodeOptions, TreeNodeOptions} from "@/components/Tree/types";
 import ATreeNode from './node'
+import {updateDownwards, updateUpwards} from './utils'
 
 // 扁平化数组
 function flattenTree(source: TreeNodeOptions[]): RequiredTreeNodeOptions[] {
@@ -38,11 +39,24 @@ export default defineComponent({
 			type: Array as PropType<TreeNodeOptions[]>,
 			default: () => []
 		},
-		lazyLoad: Function as PropType<(node: RequiredTreeNodeOptions, callback: (children: TreeNodeOptions[]) => void) => void>
+		// 控制是否显示可选框
+		showChecked: {
+			type: Boolean,
+			default: false
+		},
+		// 控制可选框父子联动
+		checkStrictly: {
+			type: Boolean,
+			default: false
+		},
+		lazyLoad: Function as PropType<(node: RequiredTreeNodeOptions, callback: (children: TreeNodeOptions[]) => void) => void>,
+		render: Function as PropType<renderFncType>
 	},
-	setup(props) {
+	emits: ['handleSelected', 'handleChange'],
+	setup(props, {emit, slots}) {
 		const loading = ref(false)
 		const flattenList = ref<RequiredTreeNodeOptions[]>([])
+		const preSelectedKey = ref<nodeKey>('')
 
 		watch(() => props.source, newVal => {
 			// 展示树列表
@@ -109,19 +123,47 @@ export default defineComponent({
 					// 懒加载
 					node.loading = true // 显示图标
 					loading.value = true // 防止重复点击
-					if(props.lazyLoad) {
+					if(props.lazyLoad && node.hasChildren) {
 						props.lazyLoad(node, (children => {
 							if(children.length) {
 								expandNode(node, children)
 							}
 							node.loading = false
 							loading.value = false
-							console.log('children', children);
 						}))
 					}
 				}
 			}else { // 收起
 				collapseNode(node)
+			}
+		}
+
+		// 选中节点触发事件
+		const handleSelected = (node: RequiredTreeNodeOptions) => {
+			const selectedKey = node.nodeKey
+			node.selected = !node.selected
+			// 之前点击节点去掉样式
+			if(preSelectedKey.value !== selectedKey) {
+				const preSelectedIndex = flattenList.value.findIndex(item => item.nodeKey === preSelectedKey.value)
+				if(preSelectedIndex > -1) {
+					flattenList.value[preSelectedIndex].selected = false
+				}
+			}
+			preSelectedKey.value = selectedKey
+
+			emit('handleSelected', node)
+		}
+
+		// 选中勾选框触发事件
+		const handleChange = ([checked, node]: [boolean, RequiredTreeNodeOptions]) => {
+			node.checked = checked
+			emit('handleChange', node)
+			// 父子联动
+			if(!props.checkStrictly) {
+				// 向下联动
+				updateDownwards(node, checked)
+				// 向上联动
+				updateUpwards(node, flattenList.value)
 			}
 		}
 
@@ -132,9 +174,15 @@ export default defineComponent({
 							flattenList.value.map((node) => {
 								return (
 										<ATreeNode
-												key={node.nodeKey}
 												node={node}
+												iconSlots={slots.icon}
+												render={props.render}
+												key={node.nodeKey}
+												checkStrictly={props.checkStrictly}
+												showChecked={props.showChecked}
 												onExpandChildNode={expandChildNode}
+												onHandleSelected={handleSelected}
+												onHandleChange={handleChange}
 										/>
 								)
 							})

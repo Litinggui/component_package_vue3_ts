@@ -26,8 +26,11 @@ interface TreeNodeOptions {
 
 type RequiredTreeNodeOptions = Required<TreeNodeOptions>
 
+type renderFncType = (node: RequiredTreeNodeOptions) => JSX.Element
+
 export {
   TreeNodeOptions,
   nodeKey,
+  renderFncType,
   RequiredTreeNodeOptions
 }

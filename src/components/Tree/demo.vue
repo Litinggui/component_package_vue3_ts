@@ -1,13 +1,18 @@
 <template>
   <div class="demo-box">
-    <h3>tree demo</h3>
-    <a-tree :source="list" :lazyLoad="lazyLoad" />
+    <a-tree
+        :source="list"
+        :lazyLoad="lazyLoad"
+        show-checked
+        @handleSelected="handleSelected"
+    >
+    </a-tree>
   </div>
 </template>
 
 <script lang="tsx">
 import {defineComponent, onMounted, ref} from 'vue';
-import {TreeNodeOptions} from "./types";
+import {RequiredTreeNodeOptions, TreeNodeOptions} from "./types";
 
 function recursion(path = '0'): TreeNodeOptions[] {
   const list = [];
@@ -48,9 +53,15 @@ export default defineComponent({
         callback(result);
       }, 1000);
     }
+
+    const handleSelected = (node: RequiredTreeNodeOptions) => {
+      // console.log('@@@@@@@@@@@@handleSelected', node);
+    }
+
     return {
       list,
-      lazyLoad
+      lazyLoad,
+      handleSelected
     }
   }
 });
