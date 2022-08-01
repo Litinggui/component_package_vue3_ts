@@ -1,7 +1,13 @@
 import {defineComponent, PropType, ref, watch} from "vue";
 import { cloneDeep } from 'lodash'
 import './index.scss'
-import {nodeKey, renderFncType, RequiredTreeNodeOptions, TreeNodeOptions} from "@/components/Tree/types";
+import {
+	nodeKey,
+	renderFncType,
+	RequiredTreeNodeOptions,
+	TreeNodeInterface,
+	TreeNodeOptions
+} from "@/components/Tree/types";
 import ATreeNode from './node'
 import {updateDownwards, updateUpwards} from './utils'
 
@@ -53,7 +59,7 @@ export default defineComponent({
 		render: Function as PropType<renderFncType>
 	},
 	emits: ['handleSelected', 'handleChange'],
-	setup(props, {emit, slots}) {
+	setup(props, {emit, slots, expose}) {
 		const loading = ref(false)
 		const flattenList = ref<RequiredTreeNodeOptions[]>([])
 		const preSelectedKey = ref<nodeKey>('')
@@ -166,18 +172,39 @@ export default defineComponent({
 				updateUpwards(node, flattenList.value)
 			}
 		}
+		// 获取node实例暴露的属性方法
+		const halfCheckedNodes = ref<TreeNodeInterface[]>([])
+		const halfChecked = (index: number, el: any) => {
+			halfCheckedNodes.value[index] = el
+		}
+		// 实例上挂载方法，供其他组件调用
+		expose({
+			// 选中的节点
+			getSelectedNode: (): RequiredTreeNodeOptions | undefined => {
+				return flattenList.value.find(item => item.selected)
+			},
+			// 勾选的节点
+			getCheckedNodes: (): RequiredTreeNodeOptions[] => {
+				return flattenList.value.filter(item => item.checked)
+			},
+			// 半选的节点
+			halfCheckedNodes: () :RequiredTreeNodeOptions[] => {
+				return halfCheckedNodes.value.filter(item => item.halfChecked()).map(item => item.node)
+			}
+		})
 
 		return () => {
 			return (
 					<div class="ant-tree-wrap">
 						{
-							flattenList.value.map((node) => {
+							flattenList.value.map((node,index) => {
 								return (
 										<ATreeNode
 												node={node}
 												iconSlots={slots.icon}
 												render={props.render}
 												key={node.nodeKey}
+												ref={(el) => halfChecked(index, el)}
 												checkStrictly={props.checkStrictly}
 												showChecked={props.showChecked}
 												onExpandChildNode={expandChildNode}

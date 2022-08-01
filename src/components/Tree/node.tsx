@@ -27,7 +27,7 @@ export default defineComponent({
   components: {
     ACheckbox
   },
-  setup(props, {emit}) {
+  setup(props, {emit, expose}) {
     // eslint-disable-next-line vue/no-setup-props-destructure
     const {node, render, iconSlots, showChecked, checkStrictly} = props
     // 展开节点
@@ -115,6 +115,11 @@ export default defineComponent({
       }
     }
 
+    expose({
+      node,
+      // halfChecked: () => halfChecked.value
+      halfChecked: () => halfChecked.value
+    })
     return () => {
       return (
         <div class="ant-tree" onClick={expandChildNode} style={{paddingLeft: node.level * 18 + 'px'}}>

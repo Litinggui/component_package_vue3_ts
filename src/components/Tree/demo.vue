@@ -1,6 +1,10 @@
 <template>
   <div class="demo-box">
+    <button @click="getSelectedNode">获取选中节点</button>
+    <button @click="getCheckedNodes">获取勾选节点</button>
+    <button @click="halfCheckedNodes">获取半选节点</button>
     <a-tree
+        ref="aTree"
         :source="list"
         :lazyLoad="lazyLoad"
         show-checked
@@ -12,7 +16,7 @@
 
 <script lang="tsx">
 import {defineComponent, onMounted, ref} from 'vue';
-import {RequiredTreeNodeOptions, TreeNodeOptions} from "./types";
+import {RequiredTreeNodeOptions, TreeInterface, TreeNodeOptions} from "./types";
 
 function recursion(path = '0'): TreeNodeOptions[] {
   const list = [];
@@ -32,8 +36,8 @@ function recursion(path = '0'): TreeNodeOptions[] {
 export default defineComponent({
   name: 'TreeDemo',
   setup(props) {
-    // https://lychub.github.io/vue-virtual-tree
     const list = ref<TreeNodeOptions[]>([]);
+    const aTree = ref<TreeInterface>()
     onMounted(() => {
       list.value = recursion();
     });
@@ -57,11 +61,28 @@ export default defineComponent({
     const handleSelected = (node: RequiredTreeNodeOptions) => {
       // console.log('@@@@@@@@@@@@handleSelected', node);
     }
+    const getCheckedNodes = () => {
+      const nodes = aTree.value?.getCheckedNodes()
+      console.log('getCheckedNodes', nodes);
+    }
+    const getSelectedNode = () => {
+      const node = aTree.value?.getSelectedNode()
+      console.log('getSelectedNode', node);
+    }
+
+    const halfCheckedNodes = () => {
+      const nodes = aTree.value?.halfCheckedNodes()
+      console.log('halfCheckedNodes', nodes);
+    }
 
     return {
       list,
+      aTree,
       lazyLoad,
-      handleSelected
+      handleSelected,
+      getSelectedNode,
+      getCheckedNodes,
+      halfCheckedNodes
     }
   }
 });

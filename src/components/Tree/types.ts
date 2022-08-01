@@ -19,6 +19,16 @@ interface TreeNodeOptions {
   parentKey?: nodeKey | null
 }
 
+interface TreeInterface {
+  getSelectedNode: () => RequiredTreeNodeOptions | undefined;
+  getCheckedNodes: () => RequiredTreeNodeOptions[];
+  halfCheckedNodes: () => RequiredTreeNodeOptions[];
+}
+
+interface TreeNodeInterface {
+  node: RequiredTreeNodeOptions;
+  halfChecked: () => boolean;
+}
 /*
 * 组件内部使用，所有参数都是必传，没传给默认值
 * 这样写组件的时候不需要判断属性是否存在
@@ -32,5 +42,7 @@ export {
   TreeNodeOptions,
   nodeKey,
   renderFncType,
-  RequiredTreeNodeOptions
+  RequiredTreeNodeOptions,
+  TreeInterface,
+  TreeNodeInterface
 }
