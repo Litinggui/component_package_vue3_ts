@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "declaration": true, // 编译类型声明
+    "emitDeclarationOnly": true, // 只输出类型声明文件
+    "declarationDir": "../../lib/typings" // 输入文件位置
+  },
+  "include": ["."]  // 当前目录
+}

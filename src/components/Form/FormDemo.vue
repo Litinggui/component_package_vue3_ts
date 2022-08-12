@@ -19,7 +19,7 @@
 <script lang="ts">
 import {defineComponent, reactive, ref} from 'vue'
 import AFormItem from "@/components/Form/FormItem";
-import AInput from "@/components/Input";
+import AInput from "@/components/Input/Input";
 import {AntFormRules, AntRuleItem, FormContext} from "@/components/Form/types";
 import {ValidateError} from "async-validator/dist-types/interface";
 

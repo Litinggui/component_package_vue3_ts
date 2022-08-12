@@ -1,11 +1,12 @@
 {
-  "name": "vue3_ts_dome",
+  "name": "my_test_ui",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-tsc --noEmit && vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "build:lib": "vue-cli-service build --target lib --dest lib ./src/components/index.ts",
+    "build:types": "tsc --project src/components/tsconfig.json"
   },
   "dependencies": {
     "async-validator": "^4.2.5",
@@ -29,6 +30,7 @@
     "sass-loader": "^12.0.0",
     "style-resources-loader": "^1.4.1",
     "typescript": "~4.5.5",
-    "vue-cli-plugin-style-resources-loader": "~0.1.5"
+    "vue-cli-plugin-style-resources-loader": "~0.1.5",
+    "vue-tsc": "^0.39.4"
   }
 }

@@ -1,4 +1,4 @@
-import {computed, defineComponent, PropType, ref, Slot, watch} from "vue";
+import {computed, defineComponent, PropType, Slot} from "vue";
 import {renderFncType, RequiredTreeNodeOptions} from "@/components/Tree/types";
 import ACheckbox from './Checkbox'
 
